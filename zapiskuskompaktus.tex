@@ -1,0 +1,342 @@
+\documentclass[a3paper,10pt]{extarticle}
+% \usepackage[utf8]{inputenc}
+\usepackage[mathletters]{ucs}
+\usepackage[utf8x]{inputenc}
+
+\usepackage{fancyhdr}
+
+\usepackage[pdftex]{graphicx} % Required for including pictures
+\usepackage[pdftex,linkcolor=black,pdfborder={0 0 0}]{hyperref} % Format links for pdf
+\usepackage{calc} % To reset the counter in the document after title page
+\usepackage{enumitem} % Includes lists
+
+\usepackage{textcomp}
+\usepackage{eurosym}
+
+\usepackage{ dsfont } % font za množice
+% tabele
+\usepackage{array}
+\usepackage{wrapfig}
+\usepackage{ textcomp }
+
+\usepackage{tikz,forest}
+\usetikzlibrary{arrows.meta}
+
+\frenchspacing % No double spacing between sentences
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+
+\usepackage{mathtools}
+\usepackage{blkarray, bigstrut} %
+
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage{tabularx}
+\usepackage[landscape]{geometry}
+\usepackage[formats]{listings}
+\usepackage{inconsolata}
+%\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
+%\usepackage{accents}
+\usepackage{pdfpages}
+\usepackage{lstautogobble}
+
+\newcommand{\vect}[1]{\accentset{\rightharpoonup}{#1}}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+    {\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+        {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+        {\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+    }
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{0}
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{0pt plus 0.5ex}
+\usepackage{textcomp}
+\newcommand{\texttildenormal}{\raisebox{0.5ex}{\texttildelow}}
+
+\lstset{basicstyle=\ttfamily, literate={~} {\texttildenormal}{1}}
+% -----------------------------------------------------------------------
+\begin{document} 
+
+\begin{center}
+    \Large{\textbf{SML-NJ}} \\
+\end{center}
+
+\begin{multicols}{4}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\section{Primitivni tipi}
+\begin{tabular}{@{}lll@{}}
+    \lstinline|()| & \lstinline|unit|\\
+    \lstinline|true|, \lstinline|false|& \lstinline|bool|\\
+    \lstinline|0|, \lstinline|42|, \lstinline|~123| & \lstinline|int|\\
+    \lstinline|3.14| & \lstinline|real|\\
+    \lstinline|#"a"| & \lstinline|char|\\
+    \lstinline|"Hello World"| & \lstinline|string|\\
+    poljuben tip & \lstinline|'a|\\
+    primerjalni tip & \lstinline|''a|\\
+\end{tabular}
+
+\section{Operatorji}
+\begin{tabular}{@{}ll@{}}
+    \lstinline|+| & \lstinline|num * num -> num|\\
+    \lstinline|-| & \lstinline|num * num -> num|\\
+    \lstinline|*| & \lstinline|real * real -> real|\\
+    \lstinline|div| & \lstinline|int * int -> int|\\
+    \lstinline|/| & \lstinline|real * real -> real|\\
+    \lstinline|mod| & \lstinline|int * int -> int|\\
+    \lstinline|~| & \lstinline|num -> num|\\
+    \lstinline|not| & \lstinline|bool -> bool|\\
+    \lstinline|andalso| & \lstinline|bool * bool -> bool|\\
+    \lstinline|orelse| & \lstinline|bool * bool -> bool|\\
+    \lstinline|<| & \lstinline|''a * ''a -> bool|\\
+    \lstinline|>| & \lstinline|''a * ''a -> bool|\\
+    \lstinline|<=| & \lstinline|''a * ''a -> bool|\\
+    \lstinline|>=| & \lstinline|''a * ''a -> bool|\\
+    \lstinline|<>| & \lstinline|''a * ''a -> bool|\\
+    \lstinline|=| & \lstinline|''a * ''a -> bool|\\
+    \lstinline|:=| & \lstinline|'a ref * 'a -> unit|\\
+    \lstinline|!| & \lstinline|'a ref -> 'a|\\
+    \lstinline|^| & \lstinline|string * string -> string|\\
+    \lstinline|@| & \lstinline|'a list * 'a list -> 'a list|\\
+\end{tabular}
+
+\section{Terke}
+\begin{tabular}{@{}ll@{}}
+    \lstinline|(v1, ..., vn)| & \lstinline|'a1 * ... * 'an |\\
+    \lstinline|(#"p", ())| & \lstinline| char * unit |\\
+    \lstinline|(123, "abc", false)| & \lstinline| int * string * bool |\\
+    \lstinline|{1=123, 2="abc", 3=false}| & \lstinline| int * string * bool |\\
+\end{tabular}
+\section{Zapisi}
+\begin{tabular}{@{}ll@{}}
+    \lstinline|{k1=v1, ..., kn=vn}| & \lstinline|{k1: 'a1, ..., kn: 'an}| \\
+    \lstinline|{ime="Jan", visina: 150}| & \lstinline|{ime: string, visina: int}| \\
+\end{tabular}
+
+Do vrednosti v zapisu dostopamo z \lstinline|#kljuc zapis|.
+
+\section{Seznami}
+\begin{tabular}{@{}ll@{}}
+    \lstinline|[]| & \lstinline|'a list|\\
+    \lstinline|hd::tl| & \lstinline|'a list|\\
+    \lstinline|[v1, v2, ..., vn]| & \lstinline|'a list|\\
+    \lstinline|[1,2,3]| & \lstinline|int list| \\
+    \lstinline|1::2::3::[]| & \lstinline|int list| \\
+\end{tabular}
+
+Funkcije za delo s seznami:
+
+\begin{tabular}{@{}ll@{}}
+    \lstinline|null| & \lstinline|fn : 'a list -> bool|\\
+    \lstinline|length| & \lstinline|fn : 'a list -> int|\\
+    \lstinline|op @| & \lstinline|fn : 'a list * 'a list -> 'a list|\\
+    \lstinline|hd| & \lstinline|fn : 'a list -> 'a|\\
+    \lstinline|tl| & \lstinline|fn : 'a list -> 'a list|\\
+    \lstinline|List.last| & \lstinline|fn : 'a list -> 'a|\\
+    \lstinline|List.nth| & \lstinline|fn : 'a list * int -> 'a|\\
+    \lstinline|List.take| & \lstinline|fn : 'a list * int -> 'a list|\\
+    \lstinline|List.drop| & \lstinline|fn : 'a list * int -> 'a list|\\
+    \lstinline|rev| & \lstinline|fn : 'a list -> 'a list|\\
+    \lstinline|map| & \lstinline|fn : ('a -> 'b) -> 'a list -> 'b list|\\
+    \lstinline|List.filter| & \lstinline|fn : ('a -> bool) -> 'a list -> 'a list|\\
+    \lstinline|foldl| & \lstinline|fn : ('a*'b -> 'b) -> 'b -> 'a list -> 'b|\\
+    \lstinline|foldr| & \lstinline|fn : ('a*'b -> 'b) -> 'b -> 'a list -> 'b|\\
+\end{tabular}
+
+Razlika med \lstinline|foldl| in \lstinline|foldr|:
+\begin{lstlisting}
+fun f (x, acc) = ... ;
+foldl f 0 [1, 2, 3] = f(3,f(2,f(1,0)))
+foldr f 0 [1, 2, 3] = f(1,f(2,f(3,0)))
+\end{lstlisting}
+
+\section{Funkcije}
+\begin{tabular}{@{}ll@{}}
+    \lstinline|fun ime args = ... | & \lstinline|fn: 'a -> 'b |\\
+    \lstinline|fun add (a, b) = a + b| & \lstinline|fn: int * int -> int|\\
+    \lstinline|fun add a b = a + b| & \lstinline|fn: int -> int -> int|\\
+    \lstinline|fn (a, b) => a+b| & \lstinline|fn: int * int -> int|\\
+    \lstinline|fun id x = x| & \lstinline|fn: 'a -> 'a|\\
+    \lstinline|fn x => x| & \lstinline|fn: 'a -> 'a|\\
+\end{tabular}
+
+Z ključno besedo fun lahko definiramo funkcije po vzorcu:
+\begin{lstlisting}
+fun f vzorec1 = izraz1
+  | f vzorec2 = izraz2
+  | ...
+  | f vzorecn = izrazn
+\end{lstlisting}
+
+\section{Opcije}
+\begin{tabular}{@{}ll@{}}
+    \lstinline|NONE| & \lstinline| 'a option |\\
+    \lstinline|SOME v| & \lstinline| 'a option |\\
+    \lstinline|SOME 13| & \lstinline| int option |\\
+\end{tabular}
+
+\section{Unije tipov}
+
+\begin{lstlisting}
+datatype ime_tipa = CONS1 of 'a1
+                  | ...
+                  | CONSn of 'an
+datatype int_or_bool = INT of int 
+                     | BOOL of bool
+datatype 'a option = NONE | SOME of 'a
+datatype 'a list = [] | :: of 'a * 'a list
+datatype ('a, 'b) generic = A of 'a 
+                          | B of 'b 
+                          | AB of 'a * 'b
+                          | NONE
+datatype oseba = 
+    OSEBA of {ime: string, priimek: string}
+\end{lstlisting}
+
+\section{Sinonimi za tipe}
+\begin{lstlisting}
+type ime_sinonima = tip
+type oseba = {ime: string, priimek: string}
+type 'a seznam = 'a list
+\end{lstlisting}
+
+\section{Ujemanje vzorcev}
+\begin{lstlisting}
+case izraz of
+    vzorec1 => izraz1
+  | vzorec2 => izraz2
+  | ...
+  | vzorecn => izrazn
+\end{lstlisting}
+Vzorec je lahko poljuben konstruktor ali primitivna vrednost. Vzorce lahko gnezdimo. 
+V vzrocu lahko uporabimo tudi spremenljivke, ki jih potem uporabimo v izrazu.
+
+V vzorcu lahko uporabljamo le konstruktorje ali vrednosti istega tipa.
+\begin{lstlisting}
+case sez of
+    [] => 0
+  | x::xs => xs @ [x]
+
+case opt of
+    NONE => 0
+  | SOME x => x
+\end{lstlisting}
+
+\section{Vzajemna rekurzija}
+Pri definiciji funkciji in tipov lahko uporabimo ključno besedo \lstinline|and|, da definiramo več funkcij ali tipov hkrati.
+
+\begin{lstlisting}
+fun liho n = 
+    if n = 0 then false else sodo (n-1)
+and sodo n = 
+    if n = 0 then true else liho (n-1)
+
+datatype a = A of b | Aend
+and      b = B of a | Bend
+\end{lstlisting}
+
+\section{Lokalno okolje}
+\begin{lstlisting}
+val x = 10;
+let
+    val y1 = x + 1 (* y1 = 11 *)
+    val x = 1   (* zasencimo globalno x *)
+    val y2 = x+1 (* y = 2 *)
+    val a = 100
+    fun f a = a + y2 (* 'a' vzamemo iz args *)
+in
+    f y1 (* vrne vrednost 11 + 2 = 13  *)
+end
+\end{lstlisting}
+
+\section{Mutacije}
+\begin{lstlisting}
+val x = ref 10; (* x = ref 10 *)
+x := 20; (* x = ref 20 *)
+!x; (* vrne 20 *)
+\end{lstlisting}
+
+\section{Izjeme}
+Svoj tip izjeme definiramo z \lstinline|exception|: 
+\begin{lstlisting}
+exception Izjema of string;
+\end{lstlisting}
+Izjemo sprožimo z \lstinline|raise|.
+\begin{lstlisting}
+raise (Izjema "Napaka");
+\end{lstlisting}
+
+Izjeme ujamemo z \lstinline|handle|:
+\begin{lstlisting}
+izraz_ki_prozi_izjemo
+handle
+    vzorec1 => izraz1
+  | vzorec2 => izraz2
+  | ...
+  | vzorecn => izrazn
+\end{lstlisting}
+
+Izjeme so tipa \lstinline|exn|.
+
+\section{Moduli}
+\begin{lstlisting}
+structure ImeModula = struct
+    (* definicije val, fun, datatype, ... *)
+end
+\end{lstlisting}
+
+Do vrednosti v modulu dostopamo z \lstinline|ImeModula.ime|. Naprimer:
+\begin{lstlisting}
+structure MojModul = struct
+    val x = 10
+    fun pozdravi () = "Zivjo" ^ Int.toString x
+end;
+
+MojModul.x; (* vrne 10 *)
+MojModul.pozdravi(); (* vrne "Zivjo10" *)
+\end{lstlisting}
+
+Lahko dodamo podpis modula, ki določa katere vrednosti so vidne izven modula.
+\begin{lstlisting}
+signature MojModulP = sig
+    val pozdravi : unit -> string
+end
+
+structure MojModul :> MojModulP = struct
+    val x = 10
+    fun add (a, b) = a + b
+    fun pozdravi () = "Zivjo" ^ Int.toString x
+end
+
+MojModul.x; (* napaka *)
+MojModul.add(1,2); (* napaka *)
+MojModul.pozdravi(); (* vrne "Zivjo10" *)
+\end{lstlisting}
+
+
+
+
+
+\end{multicols}
+\end{document}

@@ -475,6 +475,60 @@ Anonimna funkcija:
 (lambda args izraz)
 \end{lstlisting}
 
+\section{Uporabne funkcije}
+Aritmetika
+
+\begin{tabular}{@{}ll@{}}
+    \lstinline|(+ a1 ... an)| & $a_1 + \dots + a_n$  \\
+    \lstinline|(- a1 ... an)| & $a_1 - \dots - a_n$  \\
+    \lstinline|(* a1 ... an)| & $a_1 * \dots * a_n$  \\
+    \lstinline|(/ a1 ... an)| & $a_1 * \dots * a_n$  \\
+    \lstinline|(remainder a b)| & ostanek pri deljenju $a/b$  \\
+    \lstinline|(modulo a b)| & $a \mod b$  \\
+    \lstinline|(abs x)| & $|x|$  \\
+    \lstinline|(max a1 ... an)| & $\max(a_1, \dots, a_n)$  \\
+    \lstinline|(min a1 ... an)| & $\min(a_1, \dots, a_n)$  \\
+    \lstinline|(gcd a b)| & največji skupni delitelj  \\
+    \lstinline|(lcm a b)| & najmanjši skupni večkratnik  \\
+    \lstinline|(round x)| & zaokroži  \\
+    \lstinline|(floor x)| & zaokroži navzdol  \\
+    \lstinline|(ceiling x)| & zaokroži navzgor  \\
+    \lstinline|(truncate x)| & odreži decimalni del  \\
+    \lstinline|(sqrt x)| & $\sqrt{x}$  \\
+    \lstinline|(expt x y)| & $x^y$  \\
+    \lstinline|sin| \dots \lstinline|atan| & trigonometrične funkcije  \\
+\end{tabular}\\
+
+Primerjava:
+
+\begin{tabular}{@{}ll@{}}
+    \lstinline|(eq? a1 ... an)| & primerjava po referenci  \\
+    \lstinline|(= a1 ... an)| & $a_1 = \dots = a_n$  \\
+    \lstinline|(> a1 ... an)| & $a_1 > \dots > a_n$  \\
+    \lstinline|(>= a1 ... an)| & $a_1 \geq \dots \geq a_n$  \\
+    \lstinline|(< a1 ... an)| & $a_1 < \dots < a_n$  \\
+    \lstinline|(<= a1 ... an)| & $a_1 \leq \dots \leq a_n$  \\
+\end{tabular}\\
+
+Logične operacije:
+
+\begin{tabular}{@{}ll@{}}
+    \lstinline|(not a)| & $\neg a$  \\
+    \lstinline|(and a1 ... an)| & $a_1 \land \dots \land a_n$  \\
+    \lstinline|(or a1 ... an)| & $a_1 \lor \dots \lor a_n$  \\
+    \lstinline|(xor a1 ... an)| & $a_1 \oplus \dots \oplus a_n$  \\
+\end{tabular}\\
+
+Nizi:
+
+\begin{tabular}{@{}ll@{}}
+    \lstinline|(string? a)| & ali je \lstinline|a| niz  \\
+    \lstinline|(string-length a)| & dolžina niza  \\
+    \lstinline|(string-ref a i)| & $i$-ti znak niza  \\
+    \lstinline|(string-append a1 ... an)| & združi nize  \\
+\end{tabular}\\
+
+
 \section{Nadzor toka}
 \begin{lstlisting}
 (if pogoj potem sicer)
@@ -637,7 +691,7 @@ Za tabelo lahko uporabimo \lstinline|hash| ali seznam parov (kjuč, vrednost).
             )))))
 \end{lstlisting}
 
-\begin{tabular}{@{}p{3.2cm}l@{}}
+\begin{tabular}{@{}p{3.3cm}l@{}}
     Ustvari hash tabelo & \lstinline|(make-hash)| $\rightarrow$ \lstinline|hash?|\\
     Ali je \lstinline|v| hash tabela & \lstinline|(hash? v)| $\rightarrow$ \lstinline|boolean?|\\
     Vrni vrednost za ključ \lstinline|k| & \lstinline|(hash-ref h k)| $\rightarrow$ \lstinline|any/c|\\
@@ -689,9 +743,31 @@ Avtomatsko dobimo funkcije:
     Vrednost polja & \lstinline|(mojtip-polje v)| $\rightarrow$ \lstinline|any/c|\\
     Nastavi polje* & \lstinline|(set-mojtip-polje! v vrednost)| $\rightarrow$ \lstinline|void?|\\
 \end{tabular}
+
 \emph{* če je \lstinline|#:mutable|.}
 
+\section{Preverjanje}
+
+\begin{tabular}{@{}p{2.5cm}p{6.5cm}@{}}
+\textbf{statično} & 
+    preverjanje pred izvajanjem programa
+    (ne preveja semantičnih napak, izjem, pravilnosti artimetičnih operatij (deljenje z 0), ...)\\
+\textbf{dinamično} & preverjanje med izvajanjem programa\\
+\end{tabular}
 \section{Trdnost in polnost sistema tipov}
-\section{Povezava med objektnim in funkcijskim programiranjem}
+\begin{tabular}{@{}p{2.5cm}p{6.5cm}@{}}
+    \textbf{pozitiven} & program z napako \\
+    \textbf{negativen} & program brez napake\\
+\end{tabular}\\
+
+\begin{tabular}{@{}p{2.5cm}p{6.5cm}@{}}
+    \textbf{trden} (sound) & sistem nikoli ne sprejme pozitivnega programa (ima pa lažno pozitivne primere) \\
+    \textbf{poln} (comoplete) & sistem nikoli ne zavrne negativnega programa (ima pa lažno negativne primere) \\
+\end{tabular}
+
+\section{Šibki in močni sistemi tipov}
+Ne obstaja neka uveljavljena definicija. Racket ima \emph{šibki} sistem tipov. SML ima \emph{močen} sistem tipov.
+
+
 \end{multicols}
 \end{document}

@@ -71,7 +71,12 @@
 \usepackage{textcomp}
 \newcommand{\texttildenormal}{\raisebox{0.5ex}{\texttildelow}}
 
-\lstset{basicstyle=\ttfamily, literate={~} {\texttildenormal}{1}}
+\lstset{
+    basicstyle=\ttfamily, 
+    literate={~} {\texttildenormal}{1}, 
+    literate={→} {$\rightarrow$}{1},
+    mathescape=true
+}
 % -----------------------------------------------------------------------
 \begin{document} 
 
@@ -120,6 +125,8 @@
     \lstinline|^| & \lstinline|string * string -> string|\\
     \lstinline|@| & \lstinline|'a list * 'a list -> 'a list|\\
 \end{tabular}
+
+\lstinline|num| predstavlja tip \lstinline|int| ali \lstinline|real|.
 
 \section{Terke}
 \begin{tabular}{@{}ll@{}}
@@ -272,9 +279,9 @@ end
 
 \section{Mutacije}
 \begin{lstlisting}
-val x = ref 10; (* x = ref 10 *)
-x := 20; (* x = ref 20 *)
-!x; (* vrne 20 *)
+val x = ref 10; (* x = ref 10 : int ref *)
+x := 20; (* x = ref 20 : int ref *)
+!x; (* vrne 20 : int *)
 \end{lstlisting}
 
 \section{Izjeme}
@@ -334,9 +341,278 @@ MojModul.add(1,2); (* napaka *)
 MojModul.pozdravi(); (* vrne "Zivjo10" *)
 \end{lstlisting}
 
+\section{Prednosti leksikalnega dosega}
+\begin{itemize}
+    \item Imena spremenljivk v funkciji so neodvisna od imen zunanjih spremenljivk
+    \item Funkcija je neodvisna od imen uporabljenih spremenljivk
+    \item Tip funkcije lahko določimo ob njeni deklaraciji
+    \item Ovojnica shrani podatke, ki jih potrebuje za kasnejšo izvedbo.
+\end{itemize}
 
+\end{multicols}
 
+\pagebreak
+\begin{center}
+    \Large{\textbf{Racket}} \\
+\end{center}
 
+\begin{multicols}{4}
+    \setlength{\premulticols}{1pt}
+    \setlength{\postmulticols}{1pt}
+    \setlength{\multicolsep}{1pt}
+    \setlength{\columnsep}{2pt}
+
+\section{Definicije}
+Na začetku vsake datoteke moramo dodati: \lstinline|#lang racket|
+
+Definicija vrednosti:
+\begin{lstlisting}
+(define ime vrednost)
+\end{lstlisting}
+
+\section{Funkcije}
+Definicija funkcije:
+\begin{lstlisting}
+(define (ime arg1 arg2 ... argn) izraz)
+\end{lstlisting}
+
+Definicija funkcije z poljubnim številom argumentov:
+\begin{lstlisting}
+(define (ime . args) izraz)
+
+(ime 1 2 3) ; args = '(1 2 3)
+\end{lstlisting}
+
+Definicija funkcije z poimenovanimi argumenti in privzetimi vrednostmi. Nepoimenovani argumenti s privzetimi vrednostmi morajo biti za ostalimi nepoimenovanimi argumenti.
+\begin{lstlisting}
+(define (f #:ime_a a b #:ime_c c) izraz )
+(f #ime_c 3 2 #ime_a 1) ; a = 1, b = 2, c = 3
+
+(define (f #:ime_a [a 1] [b 2]) izraz )
+(f) ; a = 1, b = 2
+\end{lstlisting}
+
+Anonimna funkcija:
+\begin{lstlisting}
+(lambda (arg1 arg2 ... argn) izraz)
+(lambda args izraz)
+\end{lstlisting}
+
+\section{Nadzor toka}
+\begin{lstlisting}
+(if pogoj potem sicer)
+\end{lstlisting}
+Stavek \lstinline|cond| vrne vrednost prvega izraza, pri katerem je resničen pogoj (ne vrača \lstinline|#f|).
+\begin{lstlisting}
+(cond [pogoj1 izraz1]
+      [pogoj2 izraz2]
+      ...
+      [else izrazn])
+\end{lstlisting}
+\section*{Ujemanje vzorcev}
+\begin{lstlisting}
+(match izraz
+    (vzorec1 izraz1)
+    (vzorec2 izraz2)
+    ...
+    (else izrazn))
+\end{lstlisting}
+
+\section{Pari in seznami}
+
+\begin{tabular}{@{}p{3.2cm}l@{}}
+    Vrednost \lstinline|'()| & \lstinline|null| : \lstinline|null?|\\
+    Ustvari par & \lstinline|(cons a d)| $\rightarrow$ \lstinline|pair?|\\
+    Vrni prvi el. & \lstinline|(car p)| $\rightarrow$ \lstinline|any/c|\\
+    Vrni drugi el. & \lstinline|(cdr p)| $\rightarrow$ \lstinline|any/c|\\
+    Ali je \lstinline|v| par & \lstinline|(pair? v)| $\rightarrow$ \lstinline|boolean?|\\
+    Ali je \lstinline|v| enak \lstinline|'()| & \lstinline|(null? v)| $\rightarrow$ \lstinline|boolean?|\\
+    Ustvari seznam & \lstinline|(list v ...)| $\rightarrow$ \lstinline|list?|\\
+    Ali je \lstinline|v| seznam & \lstinline|(list? v)| $\rightarrow$ \lstinline|boolean?|\\
+    Dolžina seznama & \lstinline|(length lst)| $\rightarrow$ \lstinline|integer?|\\
+    Obrni seznam & \lstinline|(reverse lst)| $\rightarrow$ \lstinline|list?|\\
+    Vrni \lstinline|i|-ti el. seznama & \lstinline|(list-ref lst i)| $\rightarrow$ \lstinline|any/c|\\
+    Uporabi \lstinline|proc| na vsakem el. v \lstinline|lst| & \lstinline|(map proc lst ...+)| $\rightarrow$ \lstinline|list?|\\
+    Zloži iz leve & \lstinline|(foldl proc init lst ...+)| $\rightarrow$ \lstinline|list?|\\
+    Zloži iz desne & \lstinline|(foldr proc init lst ...+)| $\rightarrow$ \lstinline|list?|\\
+    Vrni seznam brez elementov za katere \lstinline|pred| vrne \lstinline|#f| & \lstinline|(filter pred lst)| $\rightarrow$ \lstinline|list?|\\
+\end{tabular}
+
+Seznam je sestavljen iz parov, kjer je drugi element seznam ali \lstinline|'()|.
+\begin{lstlisting}
+(list 1 2 3) $\equiv$ (cons 1 (cons 2 (cons 3 '())))
+\end{lstlisting}
+
+Primer uporabe \lstinline|foldl| in \lstinline|foldr|:
+\begin{lstlisting}
+(define (f x acc) ...)
+(foldl f init (list 1 2 3)) 
+    ; f(3, f(2, f(1, init)))
+(foldr f init (list 1 2 3)) 
+    ; f(1, f(2, f(3, init)))
+\end{lstlisting}
+
+Funkcije \lstinline|map|, \lstinline|foldl| in \lstinline|foldr| lahko uporabljamo na več seznamih hkrati.
+\begin{lstlisting}
+(map + (list 1 2 3) (list 4 5 6)) 
+    ; vrne (list 5 7 9)
+(foldl 
+    (lambda (x y acc) (+ acc (max x y))) 
+    0 (list 10 2 3) (list 4 20 5)) ; vrne 35 
+\end{lstlisting}
+
+\section{Lokalno okolje}
+\begin{tabular}{@{}lp{8cm}@{}}
+    \lstinline|let| & izrazi se evalvirajo v oklju \textit{pred} izrazom \lstinline|let|\\
+    \lstinline|let*| & izrazi se evalvirajo po vrsti in okolje se posodablja (kot SML)\\
+    \lstinline|letrec| & izrazi se evalvirajo v okolju, ki že vesebuje vse deklaracije naštete v \lstinline|letrec| (kot \lstinline|and| v SML)\\
+    \lstinline|define| & deluje enako kot \lstinline|letrec|, le drugačna sintaksa
+\end{tabular}
+
+Primer uporabe \lstinline|let|:
+\begin{lstlisting}
+(define x 100)
+(let ([x 10] [y x]) (cons x y)) 
+    ; vrne (10 . 100)
+\end{lstlisting}
+
+Primer uporabe \lstinline|let*|:
+\begin{lstlisting}
+(define x 100)
+(let* ([x 10] [y x]) (cons x y)) 
+    ; vrne (10 . 10)
+\end{lstlisting}
+
+Primer uporabe \lstinline|letrec|:
+\begin{lstlisting}
+(letrec 
+    ([x (lambda () y)] [y 123]) 
+    (cons (x) y)) 
+    ; vrne (123 . 123)
+\end{lstlisting}
+
+\section{Zakasnjena evalvacija}
+Zakasnjena evalvacija:
+\begin{lstlisting}
+(thunk izraz) $\equiv$ (lambda () izraz)
+\end{lstlisting}
+
+Zakasnitev in sprožitev z uporabo \lstinline|delay| in \lstinline|force|:
+\begin{lstlisting}
+(define x 
+    (delay (begin 
+        (print "dolg izracun") 
+        "rezultat")))
+(force x) 
+    ; izpise "dolg izracun" in vrne "rezultat"
+(force x) 
+    ; vrne (shranjen) "rezultat"
+\end{lstlisting}
+
+Funkcija \lstinline|delay| ustvari objekt tipa \lstinline|promise|, ki hrani izračunano vrednost.
+
+\section{Tokovi}
+Tok je funkcija, ki vrača par, v katerem je privi element vrednost drugi pa tok.
+
+Primer:
+\begin{lstlisting}
+(define enke (cons 1 (lambda () enke)))
+(define naravna 
+    (letrec (
+        [f (lambda (x) 
+            (cons x (thunk (f (+ 1 x)))))]) 
+        (f 1)))
+\end{lstlisting}
+
+Funkcija, ki izpiše prvih \lstinline|n| elementov toka:
+\begin{lstlisting}
+(define (izpisi n tok)
+    (if (> n 1) 
+        (begin
+          (displayln (car tok))
+          (izpisi (- n 1) ((cdr tok))))
+        (displayln (car tok))))
+\end{lstlisting}
+
+Funkcija, ki izpsuje elemente toka dokler velja \lstinline|pogoj|:
+\begin{lstlisting}
+(define (izppog tok pogoj)
+    (cond [(pogoj (car tok)) (begin
+            (displayln (car tok))
+            (izppog ((cdr tok)) pogoj))]
+          [#t #t]))
+\end{lstlisting}
+
+\section{Memoizacija}
+Rezultate funkcije shranimo v tabelo in jih uporabimo, če je funkcija ponovno klicana z istimi argumenti.
+
+Za tabelo lahko uporabimo \lstinline|hash| ali seznam parov (kjuč, vrednost).
+
+\begin{lstlisting}
+(define f (letrec 
+    ([memo (make-hash)])
+    (lambda (x) 
+        (if (hash-has-key? memo x) 
+            (hash-ref memo x) 
+            (let ([rezultat ...])
+                (hash-set! memo x rezultat)
+                rezultat
+            )))))
+\end{lstlisting}
+
+\begin{tabular}{@{}p{3.2cm}l@{}}
+    Ustvari hash tabelo & \lstinline|(make-hash)| $\rightarrow$ \lstinline|hash?|\\
+    Ali je \lstinline|v| hash tabela & \lstinline|(hash? v)| $\rightarrow$ \lstinline|boolean?|\\
+    Vrni vrednost za ključ \lstinline|k| & \lstinline|(hash-ref h k)| $\rightarrow$ \lstinline|any/c|\\
+    Nastavi vrednost za ključ \lstinline|k| na \lstinline|v| & \lstinline|(hash-set! h k v)| $\rightarrow$ \lstinline|void?|\\
+    Ali ima \lstinline|h| ključ \lstinline|k| & \lstinline|(hash-has-key? h k)| $\rightarrow$ \lstinline|boolean?|\\
+    Izbriši ključ \lstinline|k| iz \lstinline|h| & \lstinline|(hash-remove! h k)| $\rightarrow$ \lstinline|void?|\\
+\end{tabular}
+
+\section{Makri}
+\begin{lstlisting}
+(define-syntax ime-makra
+    (syntax-rules (kljucna-beseda1 ...) 
+        [(ime-makra vzorec) izraz]
+        ...
+    )
+)
+\end{lstlisting}
+
+\lstinline|vzorec| lahko vsebuje spremenljivke, ki se vežejo na vrednosti v izrazu in ključne besede, ki so naštete v \lstinline|syntax-rules|.
+
+Primer makra:
+\begin{lstlisting}
+(define-syntax mojif
+    (syntax-rules (then else)
+      [(mojif p then et) 
+        (if p et '())]
+      [(mojif p then et else ef)
+        (if p et ef)]
+      [(mojif p1 then e1t elif p2 e2t else ef)
+        (if p1 e1t if p2 e2t ef)]
+    ))
+
+(mojif #t then 123 else 456) ; vrne 123
+\end{lstlisting}
+
+\section{Lastni podatkovni tipi}
+\begin{lstlisting}
+(struct mojtip 
+    (polje1 polje2 ... poljen) 
+    #:transparent ; polja so vidna v REPL
+    #:mutable ; polja lahko spreminjamo
+)
+\end{lstlisting}
+Avtomatsko dobimo funkcije:
+
+\begin{tabular}{@{}ll@{}}
+    Konstruktor & \lstinline|(mojtip v1 v2 ... vn)| $\rightarrow$ \lstinline|mojtip|\\
+    Preverjanje tipa & \lstinline|(mojtip? v)| $\rightarrow$ \lstinline|boolean?|\\
+    Vrednost polja & \lstinline|(mojtip-polje v)| $\rightarrow$ \lstinline|any/c|\\
+    Nastavi polje* & \lstinline|(set-mojtip-polje! v vrednost)| $\rightarrow$ \lstinline|void?|\\
+\end{tabular}
+\emph{* če je \lstinline|#:mutable|.}
 
 \end{multicols}
 \end{document}

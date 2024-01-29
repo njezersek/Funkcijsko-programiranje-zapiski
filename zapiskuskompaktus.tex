@@ -1,4 +1,4 @@
-\documentclass[a3paper,10pt]{extarticle}
+\documentclass[a3paper,9pt]{extarticle}
 % \usepackage[utf8]{inputenc}
 \usepackage[mathletters]{ucs}
 \usepackage[utf8x]{inputenc}
@@ -24,7 +24,7 @@
 
 \frenchspacing % No double spacing between sentences
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{1em}
+\setlength{\parskip}{0.1em}
 
 \usepackage{mathtools}
 \usepackage{blkarray, bigstrut} %
@@ -80,15 +80,14 @@
 % -----------------------------------------------------------------------
 \begin{document} 
 
-\begin{center}
-    \Large{\textbf{SML-NJ}} \\
-\end{center}
-
 \begin{multicols}{4}
 \setlength{\premulticols}{1pt}
 \setlength{\postmulticols}{1pt}
 \setlength{\multicolsep}{1pt}
 \setlength{\columnsep}{2pt}
+\begin{center}
+    \huge{\textbf{SML-NJ}} \\
+\end{center}
 
 \section{Primitivni tipi}
 \begin{tabular}{@{}lll@{}}
@@ -348,19 +347,97 @@ MojModul.pozdravi(); (* vrne "Zivjo10" *)
     \item Tip funkcije lahko določimo ob njeni deklaraciji
     \item Ovojnica shrani podatke, ki jih potrebuje za kasnejšo izvedbo.
 \end{itemize}
+\columnbreak
+\begin{center}
+    \huge{\textbf{PYTHON}} \\
+\end{center}
+\section{Anonimna funkcija}
+\begin{lstlisting}[language=Python]
+f = lambda x: x + 1
+f = lambda x, y: x + y
+\end{lstlisting}
+\section{Dekoratorji}
+\begin{lstlisting}[language=Python]
+def decor(f):
+    def wrapper(*args, **kwargs):
+        print(args, kwargs)
+        f(*args, **kwargs)
+        print('end')
+    return wrapper
+
+@decor
+def say_hi(name, times=1):
+    print(f"hi {name}! "*times)
+
+say_hi('mom', times=3)
+
+# ('mom',) {'times': 3}
+# hi mom! hi mom! hi mom! 
+# end
+\end{lstlisting}
+
+\section{Iteratorji}
+
+Z razredom:
+\begin{lstlisting}[language=Python]
+class MojIterator:
+    def __init__(self, args):
+        # inicializacija
+    
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        # vrne naslednji element 
+          ali pa raise StopIteration
+
+for x in MojIterator(args):
+    pass
+\end{lstlisting}
+
+Z generatorjem:
+\begin{lstlisting}[language=Python]
+def moj_generator(args):
+    # inicializacija
+    while True:
+        # yield naslednji element
+        # ali pa return za konec
+
+for x in moj_generator(args):
+    pass        
+\end{lstlisting}
+
+Z sestavljanjem iteratorjev:
+\begin{lstlisting}[language=Python]
+moj_iterator = (x**2 for x in range(10))
+
+for x in moj_iterator:
+    pass
+\end{lstlisting}
+
+\section{Povezava med funkcijskim in objektnim prog.}
+\begin{tabular}{@{}p{4.3cm}p{4.3cm}@{}}
+    \textbf{Funkcijsko} & \textbf{Objektno}\\ \hline
+    Če dodamo novo funkcijo, moramo v njej pokriti vse konstruktorje za podatkovni tip. &
+    Če dodamo novo funkcijo, jo moramo implementirati za vse podrazrede. \\ \hline
+    Če dodamo nov konstruktor (podtip), ga moramo v vseh funkcijah pokriti. &
+    Če dodamo nov (pod)razred moramo v njem implementirati vse funkcije. \\ \hline
+    \emph{Združujemo po funkcijah} & \emph{Združujemo po razredih (tipih)} \\
+\end{tabular}
 
 \end{multicols}
 
-\pagebreak
-\begin{center}
-    \Large{\textbf{Racket}} \\
-\end{center}
 
+\pagebreak
 \begin{multicols}{4}
     \setlength{\premulticols}{1pt}
     \setlength{\postmulticols}{1pt}
     \setlength{\multicolsep}{1pt}
     \setlength{\columnsep}{2pt}
+
+\begin{center}
+    \huge{\textbf{RACKET}} \\
+\end{center}
 
 \section{Definicije}
 Na začetku vsake datoteke moramo dodati: \lstinline|#lang racket|
@@ -614,5 +691,7 @@ Avtomatsko dobimo funkcije:
 \end{tabular}
 \emph{* če je \lstinline|#:mutable|.}
 
+\section{Trdnost in polnost sistema tipov}
+\section{Povezava med objektnim in funkcijskim programiranjem}
 \end{multicols}
 \end{document}
